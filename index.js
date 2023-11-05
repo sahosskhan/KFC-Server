@@ -43,6 +43,12 @@ async function run() {
       res.send(result);
     });
 
+ // all food data
+ app.get("/allfood", async (req, res) => {
+  const allFood =  FoodCollection .find();
+  const result = await allFood.toArray();
+  res.send(result);
+});
 
 
     // Connect the client to the server	(optional starting in v4.7)
