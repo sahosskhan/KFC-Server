@@ -49,6 +49,15 @@ async function run() {
   const result = await allFood.toArray();
   res.send(result);
 });
+
+app.get("/myaddfood", async (req, res) => {
+  const allFood =  FoodCollection .find();
+  const result = await allFood.toArray();
+  res.send(result);
+});
+
+
+
  // all food data single
  app.get("/allsinglefood/:id", async (req, res) => {
   const id = req.params.id;
@@ -59,10 +68,16 @@ async function run() {
 
 // add food 
 app.post("/allfood", async (req, res) => {
+ try {
   const SingleFoodAdd = req.body;
   console.log(SingleFoodAdd);
   const result = await FoodCollection.insertOne(SingleFoodAdd);
   res.send(result);
+ }
+  catch (error) {
+    console.log(error);
+  
+ }
 });
 
     // Connect the client to the server	(optional starting in v4.7)
