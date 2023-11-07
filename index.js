@@ -31,7 +31,7 @@ async function run() {
 
 
     const FoodCollection = client.db("FoodStore").collection("AllFood");
-
+    const CartCollection = client.db("FoodStore").collection("CartFood");
 
 // // all food data
 app.get("/allfoods", async (req, res) => {
@@ -93,7 +93,20 @@ app.post("/allfoods ", async (req, res) => {
  }
 });
 
+app.post("/addCarts", async (req, res) => {
+  const Cart = req.body;
+  const result = await CartCollection.insertOne(Cart);
+  res.send(result);
+});
 
+app.get("/addCarts", async (req, res) => {
+  let query = {};
+  if (req.query?.email) {
+    query = { buyEmail: req.query.email };
+  }
+  const result = await CartCollection.find(query).toArray();
+  res.send(result);
+});
 
 
 
