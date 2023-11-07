@@ -108,6 +108,12 @@ app.get("/addCarts", async (req, res) => {
   res.send(result);
 });
 
+app.delete("/addCarts/:id", async (req, res) => {
+  const id = req.params.id;
+  const query = { _id: new ObjectId(id) };
+  const result = await CartCollection.deleteOne(query);
+  res.send(result);
+});
 
 
 
