@@ -116,6 +116,43 @@ app.delete("/addCarts/:id", async (req, res) => {
 });
 
 
+//update
+app.get("/update/:id", async (req, res) => {
+  const id = req.params.id;
+  const query = { _id: new ObjectId(id) };
+  const result = await FoodCollection.findOne(query);
+  res.send(result);
+});
+ 
+app.put("/update/:id", async (req, res) => {
+  const id = req.params.id;
+  const filter = { _id: new ObjectId(id) };
+  const options = { upsert: true };
+  const updateContent = req.body;
+  const content = {
+    $set: {
+      name: updateContent.name,
+      details: updateContent.details,
+      category: updateContent.category,
+      quantity: updateContent.quantity,
+      price: updateContent.price,
+      origin: updateContent.origin,
+      image: updateContent.image,
+    },
+  };
+  const result = await FoodCollection.updateOne(
+    filter,
+    content,
+    options
+  );
+  res.send(result);
+});
+
+
+
+
+
+
 
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
