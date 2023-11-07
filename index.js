@@ -27,7 +27,30 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
+
+
+
     const FoodCollection = client.db("FoodStore").collection("AllFood");
+
+
+// // all food data
+app.get("/allfoods", async (req, res) => {
+
+  try {
+    const search = req.query.search;
+  
+    // return res.send(search);
+    const query = { name: { $regex: search, $options: "i" }}
+    const allFood =  FoodCollection .find(query);
+    const result = await allFood.toArray();
+    res.send(result);
+  } catch (error) {
+    console.log(error);
+    
+  }
+  });
+
+
     // limited data by order number
     app.get("/allfood/limited", async (req, res) => {
       const allFood =  FoodCollection .find();
@@ -35,20 +58,10 @@ async function run() {
       res.send(result);
     });
 
-// limited data view details
-    app.get("/foodsingle/:id", async (req, res) => {
-      const id = req.params.id;
-      const query = { _id: new ObjectId(id) };
-      const result = await FoodCollection.findOne(query);
-      res.send(result);
-    });
 
- // all food data
- app.get("/allfood", async (req, res) => {
-  const allFood =  FoodCollection .find();
-  const result = await allFood.toArray();
-  res.send(result);
-});
+
+ 
+
 
 app.get("/myaddfood", async (req, res) => {
   const allFood =  FoodCollection .find();
@@ -67,7 +80,7 @@ app.get("/myaddfood", async (req, res) => {
 });
 
 // add food 
-app.post("/allfood", async (req, res) => {
+app.post("/allfoods ", async (req, res) => {
  try {
   const SingleFoodAdd = req.body;
   console.log(SingleFoodAdd);
@@ -79,6 +92,11 @@ app.post("/allfood", async (req, res) => {
   
  }
 });
+
+
+
+
+
 
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
