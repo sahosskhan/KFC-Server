@@ -42,13 +42,21 @@ async function run() {
 app.get("/allfoods", async (req, res) => {
 
   try {
-    const search = req.query.search;
-  
+    const search = req.query.search || "";
+    const page = parseInt(req.query.page) || 1;
+    const size = parseInt(req.query.size) || 9;
+    const skip = (page - 1) * size;
+  console.log("pagination query", page, size);
     // return res.send(search);
     const query = { name: { $regex: search, $options: "i" }}
-    const allFood =  FoodCollection .find(query);
-    const result = await allFood.toArray();
-    res.send(result);
+    const allFood =  FoodCollection.find(query);
+    const result = await allFood
+    .skip(skip )
+    .limit(size)
+    .toArray();
+    const count = await FoodCollection.countDocuments();
+    const data = {skip,size,count,page,result}
+    res.send(data);
   } catch (error) {
     console.log(error);
     
